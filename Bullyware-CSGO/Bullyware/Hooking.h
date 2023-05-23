@@ -45,6 +45,9 @@ public:
 		if (bHooked)
 			return nullptr;
 
+		if (!pTarget)
+			return nullptr;
+
 		if (*ppOriginal = Hook::TrampHook(pTarget, pHook, cbSize))
 			bHooked = TRUE;
 		return *ppOriginal;

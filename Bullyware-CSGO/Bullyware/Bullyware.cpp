@@ -2,9 +2,8 @@
 #include "Debug/Debug.h"
 #include "Utils.h"
 #include "Hooks/Hooks.h"
-
+#include "Render/D3DDevice.h"
 #include "Render/Drawing.h"
-
 #include "SDK/Interfaces.h"
 
 void* (*oCreateInterface)(const char*, int*) = nullptr;
@@ -47,37 +46,10 @@ BOOL WINAPI Bullyware::Initialize(HMODULE hModule)
 
 	I::Initialize();
 
+	GetD3DDevice();
 
-	IDirect3D9* pD3D = Direct3DCreate9(D3D_SDK_VERSION);
-	D3DPRESENT_PARAMETERS params = {};
-	ZeroMemory(&params, sizeof(D3DPRESENT_PARAMETERS));
-	params.Windowed = TRUE;
-	params.SwapEffect = D3DSWAPEFFECT_DISCARD;
-	params.AutoDepthStencilFormat = D3DFMT_UNKNOWN;
-	params.hDeviceWindow = hWnd;
-
-	IDirect3DDevice9* pDevice = nullptr;
-
-	if (HRESULT res = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &params, &pDevice) < 0)
-	{
-		params.Windowed = !params.Windowed;
-		if (res = pD3D->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hWnd, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &params, &pDevice) < 0)
-		{
-		}
-	}
-
-	// IDirect3DDevice9::Present
-	PVOID pPresent = (*(void***)pDevice)[17];
-
-	// Following the two jumps that the Steam present hook implement
-	uintptr_t pResolvedSteamPresent = Utils::EvaluateRelASM<uintptr_t>(Utils::EvaluateRelASM(pPresent));
-
-	// Hooking steam's present hook
-	CTrampHook* Present = new CTrampHook((PVOID)pResolvedSteamPresent, (PVOID)H::hkPresent, 6, (PVOID*)(&H::oPresent));
-
-	Sleep(10);
-
-	Present->Hook();
+	H::Initialize();
+	H::Present->Hook();
 
 	while (!bShuttingDown)
 	{
@@ -86,15 +58,12 @@ BOOL WINAPI Bullyware::Initialize(HMODULE hModule)
 		Sleep(333);
 	}
 
-	Present->Restore();
+	H::Present->Restore();
 
 	Sleep(20);
 
-	if (pD3D)
-		pD3D->Release();
-	if (pDevice)
-		pDevice->Release();
-
+	if (g_pDevice)
+		g_pDevice->Release();
 
 	Draw::Shutdown();
 

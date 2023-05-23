@@ -36,6 +36,9 @@
     <ClCompile Include="Bullyware\Hooks\Hooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Bullyware\Render\D3DDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullyware\Bullyware.h">
@@ -84,6 +87,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Bullyware\SDK\CCollisionProperties.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullyware\Render\D3DDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

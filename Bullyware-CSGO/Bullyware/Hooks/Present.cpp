@@ -6,7 +6,9 @@
 #include "../SDK/Interfaces.h"
 #include "../Bullyware.h"
 
-HRESULT __stdcall H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion)
+using namespace H;
+
+HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion)
 {
 	Draw::Initialize(pDevice);
 

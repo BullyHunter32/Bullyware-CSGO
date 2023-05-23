@@ -157,6 +157,7 @@
     <ClCompile Include="Bullyware\Hooks\Present.cpp" />
     <ClCompile Include="Bullyware\Misc\Hooking.cpp" />
     <ClCompile Include="Bullyware\Misc\FindSignature.cpp" />
+    <ClCompile Include="Bullyware\Render\D3DDevice.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <ClInclude Include="Bullyware\Debug\Debug.h" />
     <ClInclude Include="Bullyware\Hooking.h" />
     <ClInclude Include="Bullyware\Hooks\Hooks.h" />
+    <ClInclude Include="Bullyware\Render\D3DDevice.h" />
     <ClInclude Include="Bullyware\Render\Drawing.h" />
     <ClInclude Include="Bullyware\SDK\CCollisionProperties.h" />
     <ClInclude Include="Bullyware\SDK\CGlobalVars.h" />
