@@ -1,10 +1,31 @@
 #include "Hooks.h"
 #include <iostream>
 #include <format>
+#include <vector>
 
 #include "../Render/Drawing.h"
 #include "../SDK/Interfaces.h"
 #include "../Bullyware.h"
+
+// temporary skeleton esp solution
+// TODO: find & use bone names rather than ids
+// cl_countbones convar creates skeleton esp
+// maybe reverse engineer that
+std::vector<std::vector<bone_t>> BONES_CT = {
+	{ 0, 5, 6, 7, 8 },
+	{ 0, 73, 74, 75 },
+	{ 0, 82, 83, 85 },
+	{ 7, 11, 12, 14 },
+	{ 7, 41, 42, 44 },
+};
+
+std::vector<std::vector<bone_t>> BONES_T = {
+	{ 0, 5, 6, 7, 8 },
+	{ 0, 66, 67, 69 },
+	{ 0, 73, 74, 76 },
+	{ 7, 10, 11, 12 },
+	{ 7, 38, 39, 40 },
+};
 
 using namespace H;
 
@@ -27,9 +48,6 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 
 	Draw::DrawTextA(std::format("maxClients: {}", I::gpGlobals->maxClients).c_str(), 5, 5, D3DCOLOR_RGBA(255, 0, 0, 255));
 	Draw::DrawTextA(std::format("LocalPlayer: {} ({})", (void*)pLocalPlayer, iLocalPlayer).c_str(), 5, 5 + FONT_HEIGHT, D3DCOLOR_RGBA(255, 0, 0, 255));
-
-	// Draw::DrawCircle(120, 120, 50, 32, D3DCOLOR_RGBA(255, 0, 255, 255));
-
 	for (int i = 1; i < I::gpGlobals->maxClients; i++)
 	{
 		if (!pLocalPlayer) break;
@@ -93,6 +111,7 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 
 		Draw::DrawBounds(*(D3DXVECTOR2*)(&min), *(D3DXVECTOR2*)(&max), D3DCOLOR_RGBA(120, 30, 255, 190));
 		Draw::DrawTextA(std::format("{}", ply->GetHealth()).c_str(), max.x + 4, min.y, D3DCOLOR_RGBA(255, 255, 255, 200));
+		Draw::DrawTextA(std::format("{}", ply->GetTeam()).c_str(), max.x + 4, min.y + FONT_HEIGHT, D3DCOLOR_RGBA(255, 255, 255, 200));
 
 		player_info_t info;
 		if (I::EngineClient->GetPlayerInfo(i, &info))
@@ -107,7 +126,16 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 			matrix3x4_t bones[128];
 			if (renderable->SetupBones(bones, 128, BONE_USED_BY_HITBOX, I::gpGlobals->curtime))
 			{
-				Vector headPos = Vector(bones[8][0][3], bones[8][1][3], bones[8][2][3]);
+#ifdef _DEBUG
+				for (int i = 0; i < 128; i++)
+				{
+					Vector bonePos = bones->GetVector(i);
+					if (I::DebugOverlay->ScreenPosition(bonePos, screenpos) != 1)
+						Draw::DrawTextA(std::format("{}", i).c_str(), screenpos.x, screenpos.y, D3DCOLOR_RGBA(255, 255, 0, 255));
+					}
+				}
+#endif
+				Vector headPos = bones->GetVector(8);
 				if (I::DebugOverlay->ScreenPosition(headPos, screenpos) != 1)
 				{
 					float lenSqr = screenpos.Dist2DSqr({ w / 2.f, h / 2.f });
@@ -115,6 +143,15 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 					{
 						Draw::DrawLine({ w / 2.f, h / 2.f }, { screenpos.x, screenpos.y }, color, 1);
 					}
+				}
+
+				bool isCT = ply->GetTeam() == TEAM_CT;
+				D3DCOLOR color = isCT ? D3DCOLOR_RGBA(0, 0, 255, 255) : D3DCOLOR_RGBA(255, 0, 0, 255);
+
+				std::vector<std::vector<bone_t>>& vecBones = isCT == true ? BONES_CT : BONES_T;
+				for (auto& group : vecBones)
+				{
+					Draw::DrawBoneArray(bones, group, color, 1);
 				}
 			}
 		}

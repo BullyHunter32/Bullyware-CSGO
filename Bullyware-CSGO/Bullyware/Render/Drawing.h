@@ -6,6 +6,10 @@
 #pragma comment(lib, "d3d9.lib")
 #pragma comment(lib, "d3dx9.lib")
 
+#include "../SDK/Interfaces.h"
+
+#include <vector>
+
 #define FONT_FAMILY "Arial"
 #define FONT_HEIGHT 12
 #define FONT_WIDTH 6
@@ -94,5 +98,20 @@ namespace Draw
 		pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, vertices - 1, (void*)pVertices, sizeof(D3DXVECTOR2));
 		delete[] pVertices;
 #endif
+	}
+
+	inline void DrawBoneArray(matrix3x4_t* pBones, std::vector<bone_t>& vecBoneArray, D3DCOLOR col, FLOAT thickness = 1.f)
+	{
+		Vector screenpos;
+		Vector prevScreenpos;
+		for (int i = 1; i < vecBoneArray.size(); i++)
+		{
+			if (I::DebugOverlay->ScreenPosition(pBones->GetVector(vecBoneArray.at(i - 1)), prevScreenpos) != 1 &&
+				I::DebugOverlay->ScreenPosition(pBones->GetVector(vecBoneArray.at(i)), screenpos) != 1)
+			{
+				DrawLine(screenpos, prevScreenpos, col, thickness);
+			}
+
+		}
 	}
 }

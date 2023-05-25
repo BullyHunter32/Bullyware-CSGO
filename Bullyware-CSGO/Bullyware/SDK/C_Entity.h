@@ -2,6 +2,14 @@
 #include "IClientRenderable.h"
 #include "CCollisionProperties.h"
 
+enum CS_TEAM
+{
+	TEAM_CT = 3,
+	TEAM_T = 2
+};
+
+typedef unsigned short bone_t;
+
 class C_Entity
 {
 private:
@@ -36,5 +44,16 @@ public:
 	{
 		auto func = (void*(__thiscall*)(void*))((*(void***)this)[87]);
 		return func(this);
+	}
+
+	// index 391
+	const char* LookupBone(const char* bone)
+	{
+		//// ValveBiped.Bip01_Head
+		//auto func = (const char* (__thiscall*)(void*, const char*))((*(void***)this)[391]);
+		//const char* ret = func(this, bone);
+		//return ret;
+
+		return nullptr;
 	}
 };
