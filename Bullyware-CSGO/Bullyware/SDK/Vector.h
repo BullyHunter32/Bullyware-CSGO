@@ -30,6 +30,11 @@ public:
 	{
 		x = X; y = Y; z = Z;
 	}
+
+	operator D3DXVECTOR2()
+	{
+		return { x, y };
+	}
 };
 
 class QAngle : public Vector
