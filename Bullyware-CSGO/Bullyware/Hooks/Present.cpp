@@ -46,8 +46,26 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 	int iLocalPlayer = I::EngineClient->GetLocalPlayer();
 	C_Entity* pLocalPlayer = iLocalPlayer != 0 ? I::EntityList->GetClientEntity(iLocalPlayer) : nullptr;
 
-	Draw::DrawTextA(std::format("maxClients: {}", I::gpGlobals->maxClients).c_str(), 5, 5, D3DCOLOR_RGBA(255, 0, 0, 255));
-	Draw::DrawTextA(std::format("LocalPlayer: {} ({})", (void*)pLocalPlayer, iLocalPlayer).c_str(), 5, 5 + FONT_HEIGHT, D3DCOLOR_RGBA(255, 0, 0, 255));
+	int yPOS = 5;
+	auto AddDebugLine = [=, &yPOS](const std::string& str) -> void
+	{
+		Draw::DrawTextA(str.c_str(), 5, yPOS, D3DCOLOR_RGBA(255, 0, 0, 255), 0);
+		yPOS += FONT_HEIGHT;
+	};
+
+	AddDebugLine(std::format("LocalPlayer: {} ({})", (void*)pLocalPlayer, iLocalPlayer));
+	if (pLocalPlayer)
+	{
+		AddDebugLine(std::format("IsPlayer: {}", pLocalPlayer->IsPlayer()));
+		AddDebugLine(std::format("Classname: {}", pLocalPlayer->GetClassname()));
+
+		if (IClientRenderable* renderable = pLocalPlayer->GetClientRenderable())
+		{
+			AddDebugLine(std::format("Renderable: {}", (void*)renderable));
+			AddDebugLine(std::format("Renderable->EntIndex: {}", renderable->EntIndex()));
+		}
+	}
+
 	for (int i = 1; i < I::gpGlobals->maxClients; i++)
 	{
 		if (!pLocalPlayer) break;
@@ -132,7 +150,6 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 					Vector bonePos = bones->GetVector(i);
 					if (I::DebugOverlay->ScreenPosition(bonePos, screenpos) != 1)
 						Draw::DrawTextA(std::format("{}", i).c_str(), screenpos.x, screenpos.y, D3DCOLOR_RGBA(255, 255, 0, 255));
-					}
 				}
 #endif
 				Vector headPos = bones->GetVector(8);
@@ -148,11 +165,11 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 				bool isCT = ply->GetTeam() == TEAM_CT;
 				D3DCOLOR color = isCT ? D3DCOLOR_RGBA(0, 0, 255, 255) : D3DCOLOR_RGBA(255, 0, 0, 255);
 
-				std::vector<std::vector<bone_t>>& vecBones = isCT == true ? BONES_CT : BONES_T;
+			/*	std::vector<std::vector<bone_t>>& vecBones = isCT == true ? BONES_CT : BONES_T;
 				for (auto& group : vecBones)
 				{
 					Draw::DrawBoneArray(bones, group, color, 1);
-				}
+				}*/
 			}
 		}
 	}

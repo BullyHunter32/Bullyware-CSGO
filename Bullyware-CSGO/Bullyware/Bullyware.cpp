@@ -43,10 +43,13 @@ BOOL WINAPI Bullyware::Initialize(HMODULE hModule)
 #endif
 	EnumWindows(EnumWndCallback, GetCurrentProcessId());
 	Sleep(10);
-
+	
+	
 	I::Initialize();
 
 	GetD3DDevice();
+	
+	printf("g_pDevice -> %p\n", g_pDevice);
 
 	H::Initialize();
 	H::Present->Hook();
