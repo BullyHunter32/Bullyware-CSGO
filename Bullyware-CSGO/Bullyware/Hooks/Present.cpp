@@ -49,7 +49,7 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 	int yPOS = 5;
 	auto AddDebugLine = [=, &yPOS](const std::string& str) -> void
 	{
-		Draw::DrawTextA(str.c_str(), 5, yPOS, D3DCOLOR_RGBA(255, 0, 0, 255), 0);
+		Draw::DrawTextAOutlined(str.c_str(), 5, yPOS, D3DCOLOR_RGBA(255, 0, 0, 255), 1);
 		yPOS += FONT_HEIGHT;
 	};
 
@@ -127,14 +127,14 @@ HRESULT __stdcall _H::hkPresent(IDirect3DDevice9* pDevice, const RECT* pSourceRe
 			max.y = fmaxf(max.y, screenpos.y);
 		}
 
-		Draw::DrawBounds(*(D3DXVECTOR2*)(&min), *(D3DXVECTOR2*)(&max), D3DCOLOR_RGBA(120, 30, 255, 190));
-		Draw::DrawTextA(std::format("{}", ply->GetHealth()).c_str(), max.x + 4, min.y, D3DCOLOR_RGBA(255, 255, 255, 200));
+		Draw::DrawBounds(min, max, D3DCOLOR_RGBA(120, 30, 255, 190));
+		Draw::DrawTextAOutlined(std::format("{}", ply->GetHealth()).c_str(), max.x + 4, min.y, D3DCOLOR_RGBA(255, 255, 255, 200));
 		Draw::DrawTextA(std::format("{}", ply->GetTeam()).c_str(), max.x + 4, min.y + FONT_HEIGHT, D3DCOLOR_RGBA(255, 255, 255, 200));
 
 		player_info_t info;
 		if (I::EngineClient->GetPlayerInfo(i, &info))
 		{
-			Draw::DrawTextA(info.name, min.x + (max.x - min.x)/2.f, min.y - 0, D3DCOLOR_RGBA(255, 255, 255, 200), DT_CENTER | DT_BOTTOM);
+			Draw::DrawTextAOutlined(info.name, min.x + (max.x - min.x)/2.f, min.y - 0, D3DCOLOR_RGBA(255, 255, 255, 200), 1, 0xFF000000, DT_CENTER | DT_BOTTOM);
 		}
 
 

@@ -70,6 +70,29 @@ namespace Draw
 		pFont->DrawTextA(nullptr, szText, -1, &rect, format, col);
 	}
 
+	inline void DrawTextAOutlined(LPCSTR szText, LONG x, LONG y, D3DCOLOR col, INT thickness = 1.f, D3DCOLOR outlineColor = D3DCOLOR_RGBA(0, 0, 0, 255), DWORD format = 0)
+	{
+		if (pFont == nullptr) return;
+
+		RECT rect = {};
+		format |= DT_NOCLIP;
+
+		for (int _x = -thickness; _x <= thickness; _x++)
+		{
+			for (int _y = -thickness; _y <= thickness; _y++)
+			{
+				if (_x == 0 && _y == 0) continue;
+				rect.left = rect.right = x + _x;
+				rect.top = rect.bottom = y + _y;
+				pFont->DrawTextA(nullptr, szText, -1, &rect, format, outlineColor);
+			}
+		}
+
+		rect.left = rect.right = x;
+		rect.top = rect.bottom = y;
+		pFont->DrawTextA(nullptr, szText, -1, &rect, format, col);
+	}
+
 	inline void DrawBounds(const D3DXVECTOR2& mins, const D3DXVECTOR2& maxs, D3DCOLOR col, FLOAT thickness = 1.f)
 	{
 		DrawLine({ mins.x, mins.y }, { maxs.x, mins.y }, col, thickness); // tl tr
