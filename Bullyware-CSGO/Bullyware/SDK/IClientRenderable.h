@@ -23,4 +23,9 @@ public:
 	{
 		return ((bool(__thiscall*)(void* pThis, matrix3x4_t*, int, int, float))((*(void***)this)[13]))(this, pOut, nMaxBones, mask, curtime);
 	}
+
+	int EntIndex()
+	{
+		return Utils::CallVFunction<int>(this, 10);
+	}
 };

@@ -56,4 +56,19 @@ public:
 
 		return nullptr;
 	}
+
+	bool IsPlayer()
+	{
+		return Utils::CallVFunction<bool>(this, 158);
+	}
+
+	const char* GetClassname()
+	{
+		return Utils::CallVFunction<const char*>(this, 143);
+	}
+
+	void SetSequence(int nSequence)
+	{
+		return Utils::CallVFunction<void>(this, 219, nSequence);
+	}
 };

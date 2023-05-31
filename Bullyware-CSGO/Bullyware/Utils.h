@@ -23,4 +23,12 @@ namespace Utils
 	{
 		return (T)EvaluateRelASM(pAddy);
 	}
+
+	template <typename TRET, typename ...Args>
+	TRET CallVFunction(PVOID pInstance, int index, Args...args)
+	{
+		PVOID pFunc = (*(PVOID**)pInstance)[index];
+		auto func = (TRET(__thiscall*)(PVOID pThis, decltype(args)...))pFunc;
+		return func(pInstance, args...);
+	}
 }
