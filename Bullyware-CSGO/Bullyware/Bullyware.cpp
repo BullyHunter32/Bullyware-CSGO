@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include "Hooks/Hooks.h"
 #include "Render/D3DDevice.h"
+#include "Render/ImGui.h"
 #include "Render/Drawing.h"
 #include "SDK/Interfaces.h"
 
@@ -69,6 +70,7 @@ BOOL WINAPI Bullyware::Initialize(HMODULE hModule)
 		g_pDevice->Release();
 
 	Draw::Shutdown();
+	UnInitImGui();
 
 	FreeConsole();
 	if (pFile)

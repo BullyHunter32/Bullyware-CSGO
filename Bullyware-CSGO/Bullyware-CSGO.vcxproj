@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -71,14 +71,20 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Dependencies;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>Bullyware-CSGO</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Dependencies;C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(LibraryPath)</LibraryPath>
     <TargetName>Bullyware-CSGO</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(ProjectDir)Dependencies;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(ProjectDir)Dependencies;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -152,21 +158,38 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Bullyware\Bullyware.cpp" />
+    <ClCompile Include="Bullyware\Config\Settings.cpp" />
     <ClCompile Include="Bullyware\Debug\Debug.cpp" />
     <ClCompile Include="Bullyware\Hooks\Hooks.cpp" />
     <ClCompile Include="Bullyware\Hooks\Present.cpp" />
+    <ClCompile Include="Bullyware\Menu\Menu.cpp" />
     <ClCompile Include="Bullyware\Misc\Hooking.cpp" />
     <ClCompile Include="Bullyware\Misc\FindSignature.cpp" />
     <ClCompile Include="Bullyware\Render\D3DDevice.cpp" />
+    <ClCompile Include="Bullyware\Render\ImGuiImpl.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_impl_dx9.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="Dependencies\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="dllmain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullyware\Bullyware.h" />
+    <ClInclude Include="Bullyware\Config\Settings.h" />
     <ClInclude Include="Bullyware\Debug\Debug.h" />
+    <ClInclude Include="Bullyware\Features\Visuals.h" />
     <ClInclude Include="Bullyware\Hooking.h" />
     <ClInclude Include="Bullyware\Hooks\Hooks.h" />
+    <ClInclude Include="Bullyware\Menu\GUI.h" />
+    <ClInclude Include="Bullyware\Menu\Menu.h" />
+    <ClInclude Include="Bullyware\Menu\Textures.h" />
+    <ClInclude Include="Bullyware\Menu\Verdana.h" />
     <ClInclude Include="Bullyware\Render\D3DDevice.h" />
     <ClInclude Include="Bullyware\Render\Drawing.h" />
+    <ClInclude Include="Bullyware\Render\ImGui.h" />
     <ClInclude Include="Bullyware\SDK\CCollisionProperties.h" />
     <ClInclude Include="Bullyware\SDK\CGlobalVars.h" />
     <ClInclude Include="Bullyware\SDK\C_Entity.h" />
@@ -178,6 +201,14 @@
     <ClInclude Include="Bullyware\SDK\matrix3x4.h" />
     <ClInclude Include="Bullyware\SDK\Vector.h" />
     <ClInclude Include="Bullyware\Utils.h" />
+    <ClInclude Include="Dependencies\ImGui\imconfig.h" />
+    <ClInclude Include="Dependencies\ImGui\imgui.h" />
+    <ClInclude Include="Dependencies\ImGui\imgui_impl_dx9.h" />
+    <ClInclude Include="Dependencies\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="Dependencies\ImGui\imgui_internal.h" />
+    <ClInclude Include="Dependencies\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="Dependencies\ImGui\imstb_textedit.h" />
+    <ClInclude Include="Dependencies\ImGui\imstb_truetype.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

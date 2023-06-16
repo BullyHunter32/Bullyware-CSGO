@@ -93,6 +93,38 @@ namespace Draw
 		pFont->DrawTextA(nullptr, szText, -1, &rect, format, col);
 	}
 
+	inline void GetRenderMinsMaxs(const Vector& mins, const Vector& maxs, D3DXVECTOR2* minsOut, D3DXVECTOR2* maxsOut)
+	{
+		Vector bounds[8] = {
+			Vector(mins.x, mins.y, mins.z),
+			Vector(mins.x, maxs.y, mins.z),
+			Vector(maxs.x, maxs.y, mins.z),
+			Vector(maxs.x, mins.y, mins.z),
+
+			Vector(mins.x, mins.y, maxs.z),
+			Vector(mins.x, maxs.y, maxs.z),
+			Vector(maxs.x, maxs.y, maxs.z),
+			Vector(maxs.x, mins.y, maxs.z)
+		};
+
+		Vector screenpos;
+		for (size_t i = 0; i < 8; i++)
+		{
+			Vector& vec = bounds[i];
+			I::DebugOverlay->ScreenPosition(vec, screenpos);
+			if (i == 0)
+			{
+				*minsOut = screenpos;
+				*maxsOut = screenpos;
+				continue;
+			}
+			minsOut->x = fminf(minsOut->x, screenpos.x);
+			minsOut->y = fminf(minsOut->y, screenpos.y);
+			maxsOut->x = fmaxf(maxsOut->x, screenpos.x);
+			maxsOut->y = fmaxf(maxsOut->y, screenpos.y);
+		}
+	}
+
 	inline void DrawBounds(const D3DXVECTOR2& mins, const D3DXVECTOR2& maxs, D3DCOLOR col, FLOAT thickness = 1.f)
 	{
 		DrawLine({ mins.x, mins.y }, { maxs.x, mins.y }, col, thickness); // tl tr

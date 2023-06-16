@@ -14,6 +14,11 @@ public:
 		return *this;
 	}
 
+	Vector operator + (const Vector& vec)
+	{
+		return { x + vec.x, y + vec.y, z + vec.z };
+	}
+
 	float Dist2DSqr(const Vector& vec)
 	{
 		float delta = (x - vec.x) * (x - vec.x) + (y - vec.y) * (y - vec.y);
@@ -34,6 +39,11 @@ public:
 	operator D3DXVECTOR2()
 	{
 		return { x, y };
+	}
+
+	operator D3DXVECTOR2*()
+	{
+		return *this;
 	}
 };
 
